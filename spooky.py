@@ -25,7 +25,7 @@ y0 = -0.25
 z0 = -0.59
 
 # Time points at which solution is to be computed
-t = np.linspace(0, 10, 10000)
+t = np.linspace(0, 5, 50000)
 
 # Growth constant
 
