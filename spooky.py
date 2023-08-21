@@ -3,30 +3,41 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
 # Define the model (differential equation)
-def model(y, t, k):
-    dx_dt = rho * (y - x)
-    dy_dt = x * (rho - z) - y
-    dz_dt = x * y - x * y_1 - beta * z
-    dy1_dt = x * z - 2 * x * z_1 - d_0 * y_1
-    dz1_dt = 2 * x * y_1 - 4 * beta * z_1
-    return dydt
+def model(Y, t, a, b, c, d, e, f):
+    x, y, z = Y
+
+    dx_dt = a * (y - x) + d * x * z
+    dy_dt = b * x - x * z + f * y
+    dz_dt = c * z + x * y - e * x * x
+    return [dx_dt, dy_dt, dz_dt]
+
+# Parameters
+a = 32.48
+b = 45.84
+c = 1.18
+d = 0.13
+e = 0.57
+f = 14.7
 
 # Initial condition
-y0 = 1
+x0 = -0.29
+y0 = -0.25
+z0 = -0.59
 
 # Time points at which solution is to be computed
-t = np.linspace(0, 10, 100)
+t = np.linspace(0, 10, 10000)
 
 # Growth constant
-k = 1.0
 
-# Solve ODE
-y = odeint(model, y0, t, args=(k,))
+# Integrate the differential equations
+sol = odeint(model, [x0, y0, z0], t, args=(a, b, c, d, e, f))
 
-# Plot results
-plt.plot(t, y)
-plt.xlabel('Time')
-plt.ylabel('y(t)')
-plt.title('Exponential Growth')
-plt.grid(True)
+# Plot the solution
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(sol[:, 0], sol[:, 1], sol[:, 2])
+ax.set_title('Chaos System')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
 plt.show()
